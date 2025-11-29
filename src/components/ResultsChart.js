@@ -164,30 +164,23 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
       const topRange = maxPrice - strikePrice;
       const bottomRange = strikePrice - minPrice;
       
-      // More ticks in bottom range (spread out), fewer in top range (concentrated)
+      // More ticks in bottom range (spread out), more ticks in top range (tighter spacing like CALL bottom)
       const bottomTickCount = 8;
-      // Ensure at least 2-3 ticks above strike
-      const topTickCount = Math.max(3, 4);
+      // Same number of ticks above strike as CALL has below strike (4 ticks)
+      const topTickCount = 4;
       
-      // Bottom range: uniform distribution (spread out, more space)
+      // Bottom range: uniform distribution (like CALL bottom range)
       for (let i = 0; i < bottomTickCount; i++) {
         const price = strikePrice - (bottomRange * i / (bottomTickCount - 1));
         ticks.push(Math.round(price * 100) / 100);
       }
       
-      // Top range: non-uniform distribution - concentrated near strike (less space)
-      // Use exponential distribution to pack ticks near strike, but ensure at least 2-3 ticks
-      for (let i = 1; i < topTickCount; i++) {
-        // Normalize to 0-1, then apply exponential to concentrate near 0 (strike)
-        const normalized = i / topTickCount;
-        // Exponential function: 1 - e^(-k*x) where k controls concentration
-        // Higher k = more concentration near strike
-        const k = 3; // Concentration factor
-        const concentrationFactor = 1 - Math.exp(-k * normalized);
-        const price = strikePrice + (topRange * concentrationFactor);
+      // Top range: uniform distribution (exactly like CALL bottom range)
+      for (let i = 0; i < topTickCount; i++) {
+        const price = strikePrice + (topRange * i / (topTickCount - 1));
         const roundedPrice = Math.round(price * 100) / 100;
         // Only add if it's different from strike and not already added
-        if (roundedPrice > strikePrice && !ticks.some(t => Math.abs(t - roundedPrice) < 0.01)) {
+        if (roundedPrice > strikePrice && roundedPrice <= maxPrice && !ticks.some(t => Math.abs(t - roundedPrice) < 0.01)) {
           ticks.push(roundedPrice);
         }
       }

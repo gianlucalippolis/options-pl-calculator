@@ -72,10 +72,12 @@ const OptionsCalculator = ({ initialType = 'call', onTypeChange, onOpenTypeSelec
       // For PUT: drastically limit range above strike, expand range below strike (where profit is)
       const paddingBelow = padding * 1.6; // 160% of padding below
       rangeMin = Math.max(0, minKeyPrice - paddingBelow);
-      // For PUT, limit max to just above strike or currentPrice (whichever is higher) + minimal padding
-      // This prevents too much space above strike on the chart
+      // For PUT, limit max to just above strike or currentPrice (whichever is higher) + padding
+      // Increased padding to show more ticks above strike
       const maxBase = Math.max(strikePrice, currentPrice);
-      const paddingAbove = padding * 0.1; // Very minimal padding above (10%)
+      // Use larger padding above, with a minimum to ensure enough space for ticks
+      const minPaddingAbove = strikePrice * 0.05; // Minimum 5% of strike price above
+      const paddingAbove = Math.max(padding * 0.6, minPaddingAbove); // At least 60% of padding or 5% of strike
       rangeMax = maxBase + paddingAbove;
     } else {
       // For CALL: more space above strike (where profit is)
