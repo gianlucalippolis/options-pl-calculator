@@ -28,22 +28,24 @@ const OptionsForm = ({ data, onChange }) => {
 
       <div className="grid grid-cols-2 gap-4">
         <div>
+          <label htmlFor="currency">{t('currency')}</label>
+          <select
+            id="currency"
+            value={data.currency}
+            onChange={(e) => handleChange('currency', e.target.value)}
+          >
+            <option value="EUR">{t('currencyEUR')}</option>
+            <option value="USD">{t('currencyUSD')}</option>
+            <option value="GBP">{t('currencyGBP')}</option>
+          </select>
+        </div>
+        <div>
           <label htmlFor="currentPrice">{t('currentStockPrice')}</label>
           <input
             id="currentPrice"
             type="number"
             value={data.currentPrice}
             onChange={(e) => handleChange('currentPrice', parseFloat(e.target.value))}
-            step="0.01"
-          />
-        </div>
-        <div>
-          <label htmlFor="strikePrice">{t('strikePrice')}</label>
-          <input
-            id="strikePrice"
-            type="number"
-            value={data.strikePrice}
-            onChange={(e) => handleChange('strikePrice', parseFloat(e.target.value))}
             step="0.01"
           />
         </div>
@@ -58,6 +60,16 @@ const OptionsForm = ({ data, onChange }) => {
           />
         </div>
         <div>
+          <label htmlFor="strikePrice">{t('strikePrice')}</label>
+          <input
+            id="strikePrice"
+            type="number"
+            value={data.strikePrice}
+            onChange={(e) => handleChange('strikePrice', parseFloat(e.target.value))}
+            step="0.01"
+          />
+        </div>
+        <div>
           <label htmlFor="multiplier">{t('multiplier')}</label>
           <input
             id="multiplier"
@@ -66,18 +78,6 @@ const OptionsForm = ({ data, onChange }) => {
             onChange={(e) => handleChange('multiplier', parseFloat(e.target.value))}
             step="1"
           />
-        </div>
-        <div>
-          <label htmlFor="currency">{t('currency')}</label>
-          <select
-            id="currency"
-            value={data.currency}
-            onChange={(e) => handleChange('currency', e.target.value)}
-          >
-            <option value="EUR">{t('currencyEUR')}</option>
-            <option value="USD">{t('currencyUSD')}</option>
-            <option value="GBP">{t('currencyGBP')}</option>
-          </select>
         </div>
         <div>
           <label htmlFor="targetPrice">{t('targetPrice')}</label>

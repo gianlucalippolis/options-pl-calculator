@@ -37,8 +37,8 @@ const OptionsCalculator = () => {
     
     // Generate prices centered on strike price, ensuring strike is always included
     // Reduce negative prices since max loss is the premium paid
-    const stepsAbove = 15; // More steps above for profit scenarios
-    const stepsBelow = 5;  // Fewer steps below since loss is capped at premium
+    const stepsAbove = 50; // More steps above for profit scenarios
+    const stepsBelow = 20;  // Fewer steps below since loss is capped at premium
     
     // Generate prices below strike
     for (let i = stepsBelow; i > 0; i--) {

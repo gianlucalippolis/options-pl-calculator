@@ -52,6 +52,8 @@ export const translations = {
     totalProfit: "Profitto Totale",
     totalLoss: "Perdita Totale",
     daysRemaining: "Giorni alla scadenza",
+    fullScreen: 'Schermo Intero',
+    exitFullScreen: 'Esci da Schermo Intero',
   },
   en: {
     // Main title
@@ -106,5 +108,7 @@ export const translations = {
     totalProfit: "Total Profit",
     totalLoss: "Total Loss",
     daysRemaining: "Days Remaining",
+    fullScreen: 'Full Screen',
+    exitFullScreen: 'Exit Full Screen',
   },
 };
