@@ -54,6 +54,7 @@ export const translations = {
     daysRemaining: "Giorni alla scadenza",
     fullScreen: 'Schermo Intero',
     exitFullScreen: 'Esci da Schermo Intero',
+    swipeToScroll: 'Scorri per vedere più prezzi',
   },
   en: {
     // Main title
@@ -110,5 +111,6 @@ export const translations = {
     daysRemaining: "Days Remaining",
     fullScreen: 'Full Screen',
     exitFullScreen: 'Exit Full Screen',
+    swipeToScroll: 'Swipe to see more prices',
   },
 };

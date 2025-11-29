@@ -283,6 +283,10 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
             </div>
           </div>
           
+          <div className="mobile-scroll-hint">
+            <span>← {t('swipeToScroll')} →</span>
+          </div>
+          
           {daysRemaining !== null && (
             <div style={{ 
               marginTop: '1rem', 

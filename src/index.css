@@ -417,3 +417,24 @@ input[type="range"]:focus {
   height: 100%;
   padding-bottom: 0;
 }
+
+.mobile-scroll-hint {
+  display: none;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  animation: pulse 2s infinite;
+}
+
+@media (max-width: 768px) {
+  .mobile-scroll-hint {
+    display: block;
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
