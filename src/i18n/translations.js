@@ -8,11 +8,13 @@ export const translations = {
     put: 'Put',
     
     // Form labels
-    currentStockPrice: 'Prezzo Corrente Azione',
-    strikePrice: 'Prezzo Strike',
+    currentStockPrice: 'Prezzo Corrente',
+    strikePrice: 'Strike Price',
     premium: 'Premio',
-    multiplier: 'Moltiplicatore (Azioni/Contratto)',
+    multiplier: 'Moltiplicatore',
     currency: 'Valuta',
+    targetPrice: 'Target (Opzionale)',
+    quantity: 'Quantità',
     
     // Buttons
     showTable: 'Mostra Tabella',
@@ -28,6 +30,26 @@ export const translations = {
     currencyEUR: 'EUR (€)',
     currencyUSD: 'USD ($)',
     currencyGBP: 'GBP (£)',
+    
+    // Chart
+    chartTitle: 'Grafico Profitto / Perdita',
+    
+    // Money status
+    inTheMoney: 'In the Money',
+    outOfTheMoney: 'Out of the Money',
+    atTheMoney: 'At the Money',
+    
+    // Target price
+    targetAnalysis: 'Analisi Target',
+    toReachTarget: 'Per raggiungere il target',
+    priceNeedsTo: 'il prezzo deve',
+    increase: 'aumentare',
+    decrease: 'diminuire',
+    of: 'del',
+    targetReached: 'Target già raggiunto!',
+    noTarget: 'Nessun target specificato',
+    totalProfit: 'Profitto Totale',
+    totalLoss: 'Perdita Totale',
   },
   en: {
     // Main title
@@ -38,11 +60,13 @@ export const translations = {
     put: 'Put',
     
     // Form labels
-    currentStockPrice: 'Current Stock Price',
+    currentStockPrice: 'Current Price',
     strikePrice: 'Strike Price',
     premium: 'Premium',
-    multiplier: 'Multiplier (Shares/Contract)',
+    multiplier: 'Multiplier',
     currency: 'Currency',
+    targetPrice: 'Target (Optional)',
+    quantity: 'Quantity',
     
     // Buttons
     showTable: 'Show Table',
@@ -58,5 +82,25 @@ export const translations = {
     currencyEUR: 'EUR (€)',
     currencyUSD: 'USD ($)',
     currencyGBP: 'GBP (£)',
+    
+    // Chart
+    chartTitle: 'Profit / Loss Chart',
+    
+    // Money status
+    inTheMoney: 'In the Money',
+    outOfTheMoney: 'Out of the Money',
+    atTheMoney: 'At the Money',
+    
+    // Target price
+    targetAnalysis: 'Target Analysis',
+    toReachTarget: 'To reach target',
+    priceNeedsTo: 'price needs to',
+    increase: 'increase',
+    decrease: 'decrease',
+    of: 'by',
+    targetReached: 'Target already reached!',
+    noTarget: 'No target specified',
+    totalProfit: 'Total Profit',
+    totalLoss: 'Total Loss',
   }
 };

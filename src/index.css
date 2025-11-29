@@ -18,8 +18,20 @@
     0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
+html {
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   margin: 0;
+  padding: 0;
+  width: 100%;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -28,6 +40,19 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 code {
@@ -94,6 +119,7 @@ h1 {
   font-weight: 700;
   margin-bottom: 2rem;
   background: var(--accent-gradient);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: center;
@@ -215,6 +241,7 @@ tr:hover td {
 
 /* Slider */
 input[type="range"] {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   background: transparent;
@@ -247,6 +274,9 @@ input[type="range"]:focus {
 .layout-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .sidebar {
@@ -282,5 +312,40 @@ input[type="range"]:focus {
     position: relative;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+  }
+  
+  .main-content {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .card {
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 640px) {
+  .main-content {
+    padding: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .card {
+    padding: 0.75rem;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+  .container {
+    padding: 0.5rem;
+    box-sizing: border-box;
+  }
+  
+  body {
+    overflow-x: hidden;
   }
 }

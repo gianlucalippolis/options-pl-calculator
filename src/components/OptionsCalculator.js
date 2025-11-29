@@ -15,6 +15,8 @@ const OptionsCalculator = () => {
     premium: 5,
     multiplier: 100,
     currency: 'EUR',
+    targetPrice: null,
+    quantity: 1,
   });
 
   const [interval, setInterval] = useState(0.5);
@@ -25,40 +27,75 @@ const OptionsCalculator = () => {
     calculateResults();
   }, [data, interval]);
 
+
+
   const calculateResults = () => {
     const { type, currentPrice, strikePrice, premium, multiplier } = data;
     const rows = [];
-    const range = 20; // Show range +/- $20 from current price (adjustable logic if needed)
     
-    // Determine start and end price for the table
-    // We'll center it around the strike price or current price? Usually current price is good context.
-    // Let's go from (Current Price - 10% or fixed amount) to (Current Price + 10% or fixed amount)
-    // Or maybe center around Strike?
-    // Let's center around the Current Price as that's where we are now.
+    // Generate prices centered on strike price, ensuring strike is always included
+    // Reduce negative prices since max loss is the premium paid
+    const stepsAbove = 15; // More steps above for profit scenarios
+    const stepsBelow = 5;  // Fewer steps below since loss is capped at premium
     
-    // Let's generate about 20-30 rows.
-    // Start = Current Price - (10 * interval)
-    // End = Current Price + (10 * interval)
-    // Actually, user might want to see break-even.
-    
-    // Let's try a fixed number of steps up and down.
-    const steps = 15;
-    const startPrice = Math.max(0, currentPrice - (steps * interval));
-    const endPrice = currentPrice + (steps * interval);
+    // Generate prices below strike
+    for (let i = stepsBelow; i > 0; i--) {
+      const price = strikePrice - (i * interval);
+      if (price >= 0) {
+        const cleanPrice = Math.round(price * 100) / 100;
+        
+        let pnl = 0;
+        const totalCost = premium * multiplier;
 
-    for (let price = startPrice; price <= endPrice; price += interval) {
-      // Avoid floating point errors in loop
+        if (type === 'call') {
+          const intrinsicValue = Math.max(0, cleanPrice - strikePrice);
+          pnl = (intrinsicValue * multiplier) - totalCost;
+        } else {
+          const intrinsicValue = Math.max(0, strikePrice - cleanPrice);
+          pnl = (intrinsicValue * multiplier) - totalCost;
+        }
+
+        const roi = totalCost !== 0 ? (pnl / totalCost) * 100 : 0;
+
+        rows.push({
+          price: cleanPrice,
+          pnl: pnl,
+          roi: roi
+        });
+      }
+    }
+    
+    // Add strike price itself
+    const totalCost = premium * multiplier;
+    let pnlAtStrike = 0;
+    
+    if (type === 'call') {
+      const intrinsicValue = Math.max(0, strikePrice - strikePrice);
+      pnlAtStrike = (intrinsicValue * multiplier) - totalCost;
+    } else {
+      const intrinsicValue = Math.max(0, strikePrice - strikePrice);
+      pnlAtStrike = (intrinsicValue * multiplier) - totalCost;
+    }
+    
+    const roiAtStrike = totalCost !== 0 ? (pnlAtStrike / totalCost) * 100 : 0;
+    
+    rows.push({
+      price: strikePrice,
+      pnl: pnlAtStrike,
+      roi: roiAtStrike
+    });
+    
+    // Generate prices above strike
+    for (let i = 1; i <= stepsAbove; i++) {
+      const price = strikePrice + (i * interval);
       const cleanPrice = Math.round(price * 100) / 100;
       
       let pnl = 0;
-      const totalCost = premium * multiplier;
 
       if (type === 'call') {
-        // Call P&L: (Max(0, Price - Strike) * Multiplier) - Cost
         const intrinsicValue = Math.max(0, cleanPrice - strikePrice);
         pnl = (intrinsicValue * multiplier) - totalCost;
       } else {
-        // Put P&L: (Max(0, Strike - Price) * Multiplier) - Cost
         const intrinsicValue = Math.max(0, strikePrice - cleanPrice);
         pnl = (intrinsicValue * multiplier) - totalCost;
       }
@@ -85,7 +122,15 @@ const OptionsCalculator = () => {
       </div>
 
       <div className="main-content">
-        <ResultsChart results={results} strikePrice={data.strikePrice} currency={data.currency} />
+        <ResultsChart 
+          results={results} 
+          strikePrice={data.strikePrice} 
+          currency={data.currency}
+          optionType={data.type}
+          currentPrice={data.currentPrice}
+          targetPrice={data.targetPrice}
+          quantity={data.quantity}
+        />
 
         <div style={{ marginTop: '2rem', textAlign: 'center' }}>
           <button 
@@ -98,6 +143,33 @@ const OptionsCalculator = () => {
         </div>
 
         {showTable && <ResultsTable results={results} currency={data.currency} strikePrice={data.strikePrice} />}
+        
+        {/* Footer with creator credit */}
+        <div style={{ 
+          marginTop: '3rem', 
+          paddingTop: '2rem', 
+          borderTop: '1px solid var(--border-color)',
+          textAlign: 'center',
+          color: 'var(--text-secondary)',
+          fontSize: '0.875rem'
+        }}>
+          Created by{' '}
+          <a 
+            href="https://github.com/gianlucalippolis" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ 
+              color: 'var(--accent-primary)', 
+              textDecoration: 'none',
+              fontWeight: '600',
+              transition: 'color 0.2s'
+            }}
+            onMouseEnter={(e) => e.target.style.color = 'var(--accent-secondary)'}
+            onMouseLeave={(e) => e.target.style.color = 'var(--accent-primary)'}
+          >
+            Gianluca Lippolis
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -79,6 +79,28 @@ const OptionsForm = ({ data, onChange }) => {
             <option value="GBP">{t('currencyGBP')}</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="targetPrice">{t('targetPrice')}</label>
+          <input
+            id="targetPrice"
+            type="number"
+            value={data.targetPrice || ''}
+            onChange={(e) => handleChange('targetPrice', e.target.value ? parseFloat(e.target.value) : null)}
+            step="0.01"
+            placeholder="--"
+          />
+        </div>
+        <div>
+          <label htmlFor="quantity">{t('quantity')}</label>
+          <input
+            id="quantity"
+            type="number"
+            value={data.quantity}
+            onChange={(e) => handleChange('quantity', Math.max(1, parseInt(e.target.value) || 1))}
+            step="1"
+            min="1"
+          />
+        </div>
       </div>
     </div>
   );
