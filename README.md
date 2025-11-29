@@ -2,6 +2,8 @@
 
 A modern, interactive web application for calculating and visualizing profit and loss scenarios for options trading. Built with React and Recharts.
 
+**[🚀 Live Demo](https://options-pl-calculator.vercel.app/)**
+
 ## Features
 
 - **Interactive P&L Chart**: Visualize profit and loss across a range of stock prices.

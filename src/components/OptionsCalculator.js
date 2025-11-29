@@ -3,7 +3,6 @@ import OptionsForm from './OptionsForm';
 import ResultsTable from './ResultsTable';
 import ResultsChart from './ResultsChart';
 import IntervalSlider from './IntervalSlider';
-import LanguageSelector from './LanguageSelector';
 import { useLanguage } from '../context/LanguageContext';
 
 const OptionsCalculator = () => {
@@ -118,7 +117,6 @@ const OptionsCalculator = () => {
     <div className="layout-container">
       <div className="sidebar">
         <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem', textAlign: 'left' }}>{t('title')}</h1>
-        <LanguageSelector />
         <OptionsForm data={data} onChange={setData} />
         <IntervalSlider value={interval} onChange={setInterval} currency={data.currency} />
       </div>
