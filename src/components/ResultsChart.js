@@ -131,19 +131,53 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
     const minPrice = results[0].price;
     const maxPrice = results[results.length - 1].price;
     const range = maxPrice - minPrice;
-    const tickCount = 12; // Number of ticks to show (increased for better visibility)
-    const step = range / (tickCount - 1);
     
     const ticks = [];
-    for (let i = 0; i < tickCount; i++) {
-      ticks.push(Math.round((minPrice + (step * i)) * 100) / 100);
+    
+    if (optionType === 'put') {
+      // For PUT options: more ticks at the top (high prices on the left)
+      const topRange = maxPrice - strikePrice;
+      const bottomRange = strikePrice - minPrice;
+      
+      // More ticks in the top range
+      const topTickCount = 8;
+      const bottomTickCount = 4;
+      
+      for (let i = 0; i < topTickCount; i++) {
+        const price = strikePrice + (topRange * i / (topTickCount - 1));
+        ticks.push(Math.round(price * 100) / 100);
+      }
+      
+      for (let i = 1; i < bottomTickCount; i++) {
+        const price = strikePrice - (bottomRange * i / (bottomTickCount - 1));
+        ticks.push(Math.round(price * 100) / 100);
+      }
+    } else {
+      // For CALL options: more ticks at the top (high prices on the right)
+      const topRange = maxPrice - strikePrice;
+      const bottomRange = strikePrice - minPrice;
+      
+      // More ticks in the bottom range
+      const bottomTickCount = 4;
+      const topTickCount = 8;
+      
+      for (let i = 0; i < bottomTickCount; i++) {
+        const price = strikePrice - (bottomRange * i / (bottomTickCount - 1));
+        ticks.push(Math.round(price * 100) / 100);
+      }
+      
+      for (let i = 1; i < topTickCount; i++) {
+        const price = strikePrice + (topRange * i / (topTickCount - 1));
+        ticks.push(Math.round(price * 100) / 100);
+      }
     }
     
     // Always include strike price if it's not already in the ticks
     if (!ticks.some(tick => Math.abs(tick - strikePrice) < 0.01)) {
       ticks.push(strikePrice);
-      ticks.sort((a, b) => a - b);
     }
+    
+    ticks.sort((a, b) => a - b);
     
     return ticks;
   };
@@ -243,6 +277,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                     ticks={customTicks}
                     stroke="var(--text-secondary)"
                     tick={<CustomXAxisTick />}
+                    reversed={optionType === 'put'}
                   />
                   <YAxis 
                     stroke="var(--text-secondary)"
