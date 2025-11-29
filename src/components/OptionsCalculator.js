@@ -184,6 +184,7 @@ const OptionsCalculator = ({ initialType = 'call', onTypeChange, onOpenTypeSelec
         <div style={{ 
           marginTop: '3rem', 
           paddingTop: '2rem', 
+          paddingBottom: '2rem',
           borderTop: '1px solid var(--border-color)',
           textAlign: 'center',
           color: 'var(--text-secondary)',
