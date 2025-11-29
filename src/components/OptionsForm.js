@@ -44,6 +44,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="currentPrice"
             type="number"
+            inputMode="decimal"
             value={data.currentPrice}
             onChange={(e) => handleChange('currentPrice', parseFloat(e.target.value))}
             step="0.01"
@@ -54,6 +55,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="premium"
             type="number"
+            inputMode="decimal"
             value={data.premium}
             onChange={(e) => handleChange('premium', parseFloat(e.target.value))}
             step="0.01"
@@ -64,6 +66,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="strikePrice"
             type="number"
+            inputMode="decimal"
             value={data.strikePrice}
             onChange={(e) => handleChange('strikePrice', parseFloat(e.target.value))}
             step="0.01"
@@ -74,6 +77,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="multiplier"
             type="number"
+            inputMode="numeric"
             value={data.multiplier}
             onChange={(e) => handleChange('multiplier', parseFloat(e.target.value))}
             step="1"
@@ -84,6 +88,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="targetPrice"
             type="number"
+            inputMode="decimal"
             value={data.targetPrice || ''}
             onChange={(e) => handleChange('targetPrice', e.target.value ? parseFloat(e.target.value) : null)}
             step="0.01"
@@ -95,6 +100,7 @@ const OptionsForm = ({ data, onChange }) => {
           <input
             id="quantity"
             type="number"
+            inputMode="numeric"
             value={data.quantity}
             onChange={(e) => handleChange('quantity', Math.max(1, parseInt(e.target.value) || 1))}
             step="1"

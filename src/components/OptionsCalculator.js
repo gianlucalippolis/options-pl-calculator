@@ -32,6 +32,10 @@ const OptionsCalculator = () => {
     const { type, currentPrice, strikePrice, premium, multiplier, quantity, targetPrice } = data;
     const rows = [];
     
+    // Calculate costs
+    const costPerOption = premium * multiplier;
+    const totalCost = costPerOption * quantity;
+    
     // Find the min and max of the key prices
     const keyPrices = [currentPrice, strikePrice];
     if (targetPrice && targetPrice > 0) {
