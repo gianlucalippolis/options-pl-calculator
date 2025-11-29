@@ -55,6 +55,11 @@ export const translations = {
     fullScreen: 'Schermo Intero',
     exitFullScreen: 'Esci da Schermo Intero',
     swipeToScroll: 'Scorri per vedere più prezzi',
+    disclaimerTitle: 'Disclaimer Importante',
+    disclaimerText1: 'Il trading di opzioni comporta un alto livello di rischio e non è adatto a tutti gli investitori. È possibile perdere l\'intero capitale investito.',
+    disclaimerText2: 'Questo software è fornito esclusivamente a scopo dimostrativo ed educativo per visualizzare possibili scenari di profitto e perdita. Non costituisce consulenza finanziaria o raccomandazione di investimento.',
+    disclaimerText3: 'Gli autori non si assumono alcuna responsabilità per eventuali perdite finanziarie o decisioni prese basandosi su questo strumento.',
+    iUnderstand: 'Ho capito',
   },
   en: {
     // Main title
@@ -112,5 +117,10 @@ export const translations = {
     fullScreen: 'Full Screen',
     exitFullScreen: 'Exit Full Screen',
     swipeToScroll: 'Swipe to see more prices',
+    disclaimerTitle: 'Important Disclaimer',
+    disclaimerText1: 'Options trading involves a high level of risk and is not suitable for all investors. You can lose your entire investment.',
+    disclaimerText2: 'This software is provided solely for demonstrative and educational purposes to visualize possible profit and loss scenarios. It does not constitute financial advice or investment recommendation.',
+    disclaimerText3: 'The authors assume no responsibility for any financial losses or decisions made based on this tool.',
+    iUnderstand: 'I understand',
   },
 };
