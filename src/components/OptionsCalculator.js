@@ -4,10 +4,10 @@ import ResultsTable from './ResultsTable';
 import ResultsChart from './ResultsChart';
 import { useLanguage } from '../context/LanguageContext';
 
-const OptionsCalculator = () => {
+const OptionsCalculator = ({ initialType = 'call', onTypeChange, onOpenTypeSelector }) => {
   const { t } = useLanguage();
   const [data, setData] = useState({
-    type: 'call',
+    type: initialType,
     currentPrice: 100,
     strikePrice: 100,
     premium: 5,
@@ -18,6 +18,12 @@ const OptionsCalculator = () => {
     quantity: 1,
     expirationDate: '',
   });
+
+  useEffect(() => {
+    if (initialType !== data.type) {
+      setData(prev => ({ ...prev, type: initialType }));
+    }
+  }, [initialType]);
 
   const [showTable, setShowTable] = useState(false);
   const [results, setResults] = useState([]);
@@ -61,12 +67,24 @@ const OptionsCalculator = () => {
       padding = Math.max(proportionalPadding, minPadding);
     }
     
-    // Asymmetric range: much more prices above (profit scenarios) than below (limited loss)
-    const paddingBelow = padding * 0.4; // 40% of padding below
-    const paddingAbove = padding * 1.6; // 160% of padding above
-    
-    const rangeMin = Math.max(0, minKeyPrice - paddingBelow);
-    const rangeMax = maxKeyPrice + paddingAbove;
+    // Asymmetric range: for CALL more prices above (profit), for PUT more prices below (profit)
+    let rangeMin, rangeMax;
+    if (type === 'put') {
+      // For PUT: drastically limit range above strike, expand range below strike (where profit is)
+      const paddingBelow = padding * 1.6; // 160% of padding below
+      rangeMin = Math.max(0, minKeyPrice - paddingBelow);
+      // For PUT, limit max to just above strike or currentPrice (whichever is higher) + minimal padding
+      // This prevents too much space above strike on the chart
+      const maxBase = Math.max(strikePrice, currentPrice);
+      const paddingAbove = padding * 0.1; // Very minimal padding above (10%)
+      rangeMax = maxBase + paddingAbove;
+    } else {
+      // For CALL: more space above strike (where profit is)
+      const paddingBelow = padding * 0.4; // 40% of padding below
+      const paddingAbove = padding * 1.6; // 160% of padding above
+      rangeMin = Math.max(0, minKeyPrice - paddingBelow);
+      rangeMax = maxKeyPrice + paddingAbove;
+    }
     const totalRange = rangeMax - rangeMin;
     
     // Calculate interval to get ~40-50 points (less dense, more readable)
@@ -114,6 +132,24 @@ const OptionsCalculator = () => {
     <div className="layout-container">
       <div className="sidebar">
         <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem', textAlign: 'left' }}>{t('title')}</h1>
+        <button 
+          className="accept-btn" 
+          onClick={onOpenTypeSelector}
+          style={{ 
+            marginBottom: '1.5rem',
+            background: 'var(--accent-gradient)',
+            color: 'white',
+            border: 'none',
+            padding: '0.75rem 1rem',
+            borderRadius: 'var(--radius-md)',
+            fontWeight: 600,
+            cursor: 'pointer',
+            transition: 'opacity 0.2s',
+            width: '100%'
+          }}
+        >
+          {t('changeOptionType') || 'Cambia Tipo Opzione'}
+        </button>
         <OptionsForm data={data} onChange={setData} />
       </div>
 

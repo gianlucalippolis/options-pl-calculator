@@ -9,22 +9,6 @@ const OptionsForm = ({ data, onChange }) => {
 
   return (
     <div>
-      <div className="flex justify-between items-center" style={{ marginBottom: '2rem' }}>
-        <div className="toggle-container">
-          <button
-            className={`toggle-btn ${data.type === 'call' ? 'active' : ''}`}
-            onClick={() => handleChange('type', 'call')}
-          >
-            {t('call')}
-          </button>
-          <button
-            className={`toggle-btn ${data.type === 'put' ? 'active' : ''}`}
-            onClick={() => handleChange('type', 'put')}
-          >
-            {t('put')}
-          </button>
-        </div>
-      </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>

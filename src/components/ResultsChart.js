@@ -135,22 +135,36 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
     const ticks = [];
     
     if (optionType === 'put') {
-      // For PUT options: more ticks at the top (high prices on the left)
+      // For PUT options: ticks above strike concentrated near strike, ticks below spread out
       const topRange = maxPrice - strikePrice;
       const bottomRange = strikePrice - minPrice;
       
-      // More ticks in the top range
-      const topTickCount = 8;
-      const bottomTickCount = 4;
+      // More ticks in bottom range (spread out), fewer in top range (concentrated)
+      const bottomTickCount = 8;
+      // Ensure at least 2-3 ticks above strike
+      const topTickCount = Math.max(3, 4);
       
-      for (let i = 0; i < topTickCount; i++) {
-        const price = strikePrice + (topRange * i / (topTickCount - 1));
+      // Bottom range: uniform distribution (spread out, more space)
+      for (let i = 0; i < bottomTickCount; i++) {
+        const price = strikePrice - (bottomRange * i / (bottomTickCount - 1));
         ticks.push(Math.round(price * 100) / 100);
       }
       
-      for (let i = 1; i < bottomTickCount; i++) {
-        const price = strikePrice - (bottomRange * i / (bottomTickCount - 1));
-        ticks.push(Math.round(price * 100) / 100);
+      // Top range: non-uniform distribution - concentrated near strike (less space)
+      // Use exponential distribution to pack ticks near strike, but ensure at least 2-3 ticks
+      for (let i = 1; i < topTickCount; i++) {
+        // Normalize to 0-1, then apply exponential to concentrate near 0 (strike)
+        const normalized = i / topTickCount;
+        // Exponential function: 1 - e^(-k*x) where k controls concentration
+        // Higher k = more concentration near strike
+        const k = 3; // Concentration factor
+        const concentrationFactor = 1 - Math.exp(-k * normalized);
+        const price = strikePrice + (topRange * concentrationFactor);
+        const roundedPrice = Math.round(price * 100) / 100;
+        // Only add if it's different from strike and not already added
+        if (roundedPrice > strikePrice && !ticks.some(t => Math.abs(t - roundedPrice) < 0.01)) {
+          ticks.push(roundedPrice);
+        }
       }
     } else {
       // For CALL options: more ticks at the top (high prices on the right)
@@ -219,6 +233,18 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
 
   return (
     <div>
+      <h2 style={{ 
+        marginBottom: '1rem', 
+        fontSize: '1.75rem',
+        fontWeight: 600,
+        color: 'var(--text-primary)',
+        textAlign: 'left'
+      }}>
+        {t('optionType')}: <span style={{ 
+          color: 'var(--accent-primary)',
+          textTransform: 'uppercase'
+        }}>{t(optionType)}</span>
+      </h2>
       <div className={isFullScreen ? "fullscreen-overlay" : ""}>
         <div className="card" style={isFullScreen ? { padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column' } : { minHeight: '500px', padding: '1.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, marginBottom: '1rem' }}>

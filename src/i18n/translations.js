@@ -34,6 +34,7 @@ export const translations = {
 
     // Chart
     chartTitle: "Grafico Profitto / Perdita",
+    optionType: "Tipo di Opzione",
 
     // Money status
     inTheMoney: "In the Money",
@@ -60,6 +61,9 @@ export const translations = {
     disclaimerText2: 'Questo software è fornito esclusivamente a scopo dimostrativo ed educativo per visualizzare possibili scenari di profitto e perdita. Non costituisce consulenza finanziaria o raccomandazione di investimento.',
     disclaimerText3: 'Gli autori non si assumono alcuna responsabilità per eventuali perdite finanziarie o decisioni prese basandosi su questo strumento.',
     iUnderstand: 'Ho capito',
+    selectOptionType: 'Seleziona Tipo di Opzione',
+    changeOptionType: 'Cambia Tipo Opzione',
+    cancel: 'Annulla',
   },
   en: {
     // Main title
@@ -96,6 +100,7 @@ export const translations = {
 
     // Chart
     chartTitle: "Profit / Loss Chart",
+    optionType: "Option Type",
 
     // Money status
     inTheMoney: "In the Money",
@@ -122,5 +127,8 @@ export const translations = {
     disclaimerText2: 'This software is provided solely for demonstrative and educational purposes to visualize possible profit and loss scenarios. It does not constitute financial advice or investment recommendation.',
     disclaimerText3: 'The authors assume no responsibility for any financial losses or decisions made based on this tool.',
     iUnderstand: 'I understand',
+    selectOptionType: 'Select Option Type',
+    changeOptionType: 'Change Option Type',
+    cancel: 'Cancel',
   },
 };

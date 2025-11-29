@@ -4,25 +4,53 @@ import DisclaimerModal from './components/DisclaimerModal';
 import { LanguageProvider } from './context/LanguageContext';
 
 function App() {
-  const [showDisclaimer, setShowDisclaimer] = React.useState(false);
+  const [showDisclaimer, setShowDisclaimer] = React.useState(true);
+  const [selectedType, setSelectedType] = React.useState(null);
 
   React.useEffect(() => {
     const hasAccepted = localStorage.getItem('disclaimerAccepted');
-    if (!hasAccepted) {
+    const savedType = localStorage.getItem('selectedOptionType');
+    if (hasAccepted && savedType) {
+      setSelectedType(savedType);
+      // Still show modal on refresh to allow type selection
       setShowDisclaimer(true);
     }
   }, []);
 
-  const handleAcceptDisclaimer = () => {
+  const handleAcceptDisclaimer = (type) => {
     localStorage.setItem('disclaimerAccepted', 'true');
+    localStorage.setItem('selectedOptionType', type);
+    setSelectedType(type);
     setShowDisclaimer(false);
+  };
+
+  const handleOpenTypeSelector = () => {
+    setShowDisclaimer(true);
   };
 
   return (
     <LanguageProvider>
       <div className="App">
-        {showDisclaimer && <DisclaimerModal onAccept={handleAcceptDisclaimer} />}
-        <OptionsCalculator />
+        {showDisclaimer && (
+          <DisclaimerModal 
+            onAccept={handleAcceptDisclaimer} 
+            onClose={() => {
+              const savedType = localStorage.getItem('selectedOptionType');
+              if (savedType) {
+                setShowDisclaimer(false);
+              }
+            }}
+            skipToTypeSelection={!!localStorage.getItem('disclaimerAccepted')}
+            currentType={selectedType}
+          />
+        )}
+        {!showDisclaimer && selectedType && (
+          <OptionsCalculator 
+            initialType={selectedType} 
+            onTypeChange={setSelectedType}
+            onOpenTypeSelector={handleOpenTypeSelector}
+          />
+        )}
       </div>
     </LanguageProvider>
   );
