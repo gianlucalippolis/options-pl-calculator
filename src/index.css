@@ -24,7 +24,9 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -142,6 +144,7 @@ label {
 
 /* Form Elements */
 input[type="number"],
+input[type="date"],
 select {
   width: 100%;
   padding: 0.75rem;
@@ -155,6 +158,7 @@ select {
 }
 
 input[type="number"]:focus,
+input[type="date"]:focus,
 select:focus {
   outline: none;
   border-color: var(--accent-primary);
@@ -305,7 +309,7 @@ input[type="range"]:focus {
   .layout-container {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: auto;
@@ -313,13 +317,13 @@ input[type="range"]:focus {
     border-right: none;
     border-bottom: 1px solid var(--border-color);
   }
-  
+
   .main-content {
     padding: 1rem;
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   .card {
     padding: 1rem;
     box-sizing: border-box;
@@ -332,19 +336,19 @@ input[type="range"]:focus {
     width: 100%;
     box-sizing: border-box;
   }
-  
+
   .card {
     padding: 0.75rem;
     margin: 0;
     box-sizing: border-box;
     width: 100%;
   }
-  
+
   .container {
     padding: 0.5rem;
     box-sizing: border-box;
   }
-  
+
   body {
     overflow-x: hidden;
   }

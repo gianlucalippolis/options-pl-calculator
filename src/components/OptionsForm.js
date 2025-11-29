@@ -101,6 +101,15 @@ const OptionsForm = ({ data, onChange }) => {
             min="1"
           />
         </div>
+        <div>
+          <label htmlFor="expirationDate">{t('expirationDate')}</label>
+          <input
+            id="expirationDate"
+            type="date"
+            value={data.expirationDate || ''}
+            onChange={(e) => handleChange('expirationDate', e.target.value)}
+          />
+        </div>
       </div>
     </div>
   );

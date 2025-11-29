@@ -16,7 +16,9 @@ const OptionsCalculator = () => {
     multiplier: 100,
     currency: 'EUR',
     targetPrice: null,
+    targetPrice: null,
     quantity: 1,
+    expirationDate: '',
   });
 
   const [interval, setInterval] = useState(0.5);
@@ -130,6 +132,7 @@ const OptionsCalculator = () => {
           currentPrice={data.currentPrice}
           targetPrice={data.targetPrice}
           quantity={data.quantity}
+          expirationDate={data.expirationDate}
         />
 
         <div style={{ marginTop: '2rem', textAlign: 'center' }}>

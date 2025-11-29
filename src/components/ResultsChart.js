@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { useLanguage } from '../context/LanguageContext';
 
-const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice, targetPrice, quantity = 1 }) => {
+const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice, targetPrice, quantity = 1, expirationDate }) => {
   const { t } = useLanguage();
   const getSymbol = (curr) => {
     switch(curr) {
@@ -74,6 +74,18 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
   };
 
   const targetAnalysis = getTargetAnalysis();
+  
+  // Calculate days remaining
+  const getDaysRemaining = () => {
+    if (!expirationDate) return null;
+    const today = new Date();
+    const expDate = new Date(expirationDate);
+    const diffTime = expDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+    return diffDays;
+  };
+
+  const daysRemaining = getDaysRemaining();
 
   // Find min and max P&L to set domain if needed, or let Recharts handle it.
   // We want to make sure 0 is visible.
@@ -189,10 +201,10 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
           <ComposedChart
             data={results}
             margin={{
-              top: 20,
-              right: 30,
-              left: 20,
-              bottom: 40,
+              top: 10,
+              right: 10,
+              left: 0,
+              bottom: 20,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
@@ -240,6 +252,22 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
             />
           </ComposedChart>
         </ResponsiveContainer>
+        
+        {daysRemaining !== null && (
+          <div style={{ 
+            marginTop: '1rem', 
+            padding: '0.75rem', 
+            backgroundColor: 'var(--bg-secondary)', 
+            borderRadius: '8px',
+            textAlign: 'center',
+            border: '1px solid var(--border-color)'
+          }}>
+            <span style={{ color: 'var(--text-secondary)', marginRight: '0.5rem' }}>{t('daysRemaining')}:</span>
+            <span style={{ fontWeight: 'bold', color: daysRemaining > 0 ? 'var(--text-primary)' : 'var(--danger)' }}>
+              {daysRemaining > 0 ? daysRemaining : 0}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Target Analysis Card */}
