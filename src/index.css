@@ -415,7 +415,7 @@ input[type="range"]:focus {
 .fullscreen-overlay .chart-scroll-container {
   flex: 1;
   height: 100%;
-  padding-bottom: 0;
+  padding-bottom: 20px; /* Add padding for scrollbar/safe area */
 }
 
 .mobile-scroll-hint {

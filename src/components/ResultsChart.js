@@ -227,7 +227,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                     top: 20,
                     right: 20,
                     left: 0,
-                    bottom: 20,
+                    bottom: 40, // Increased for iOS safe area
                   } : {
                     top: 10,
                     right: 10,
