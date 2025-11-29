@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const OptionsForm = ({ data, onChange }) => {
+  const { t } = useLanguage();
   const handleChange = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -13,20 +15,20 @@ const OptionsForm = ({ data, onChange }) => {
             className={`toggle-btn ${data.type === 'call' ? 'active' : ''}`}
             onClick={() => handleChange('type', 'call')}
           >
-            Call
+            {t('call')}
           </button>
           <button
             className={`toggle-btn ${data.type === 'put' ? 'active' : ''}`}
             onClick={() => handleChange('type', 'put')}
           >
-            Put
+            {t('put')}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="currentPrice">Current Stock Price ($)</label>
+          <label htmlFor="currentPrice">{t('currentStockPrice')}</label>
           <input
             id="currentPrice"
             type="number"
@@ -36,7 +38,7 @@ const OptionsForm = ({ data, onChange }) => {
           />
         </div>
         <div>
-          <label htmlFor="strikePrice">Strike Price ($)</label>
+          <label htmlFor="strikePrice">{t('strikePrice')}</label>
           <input
             id="strikePrice"
             type="number"
@@ -46,7 +48,7 @@ const OptionsForm = ({ data, onChange }) => {
           />
         </div>
         <div>
-          <label htmlFor="premium">Premium ($)</label>
+          <label htmlFor="premium">{t('premium')}</label>
           <input
             id="premium"
             type="number"
@@ -56,7 +58,7 @@ const OptionsForm = ({ data, onChange }) => {
           />
         </div>
         <div>
-          <label htmlFor="multiplier">Multiplier (Shares/Contract)</label>
+          <label htmlFor="multiplier">{t('multiplier')}</label>
           <input
             id="multiplier"
             type="number"
@@ -66,15 +68,15 @@ const OptionsForm = ({ data, onChange }) => {
           />
         </div>
         <div>
-          <label htmlFor="currency">Currency</label>
+          <label htmlFor="currency">{t('currency')}</label>
           <select
             id="currency"
             value={data.currency}
             onChange={(e) => handleChange('currency', e.target.value)}
           >
-            <option value="EUR">EUR (€)</option>
-            <option value="USD">USD ($)</option>
-            <option value="GBP">GBP (£)</option>
+            <option value="EUR">{t('currencyEUR')}</option>
+            <option value="USD">{t('currencyUSD')}</option>
+            <option value="GBP">{t('currencyGBP')}</option>
           </select>
         </div>
       </div>

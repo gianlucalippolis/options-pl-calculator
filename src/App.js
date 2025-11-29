@@ -1,11 +1,14 @@
 import React from 'react';
 import OptionsCalculator from './components/OptionsCalculator';
+import { LanguageProvider } from './context/LanguageContext';
 
 function App() {
   return (
-    <div className="App">
-      <OptionsCalculator />
-    </div>
+    <LanguageProvider>
+      <div className="App">
+        <OptionsCalculator />
+      </div>
+    </LanguageProvider>
   );
 }
 

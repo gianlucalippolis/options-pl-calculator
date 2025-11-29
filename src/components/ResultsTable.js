@@ -1,6 +1,8 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const ResultsTable = ({ results, currency, strikePrice }) => {
+  const { t } = useLanguage();
   const getSymbol = (curr) => {
     switch(curr) {
       case 'USD': return '$';
@@ -16,9 +18,9 @@ const ResultsTable = ({ results, currency, strikePrice }) => {
       <table>
         <thead>
           <tr>
-            <th>Stock Price</th>
-            <th>Profit / Loss</th>
-            <th>% Return</th>
+            <th>{t('stockPrice')}</th>
+            <th>{t('profitLoss')}</th>
+            <th>{t('percentReturn')}</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +29,7 @@ const ResultsTable = ({ results, currency, strikePrice }) => {
             return (
               <tr key={index} style={isStrike ? { backgroundColor: 'rgba(59, 130, 246, 0.1)', borderLeft: '4px solid var(--accent-primary)' } : {}}>
                 <td style={isStrike ? { fontWeight: 'bold', color: 'var(--accent-primary)' } : {}}>
-                  {symbol}{row.price.toFixed(2)} {isStrike && '(Strike)'}
+                  {symbol}{row.price.toFixed(2)} {isStrike && `(${t('strike')})`}
                 </td>
                 <td className={row.pnl >= 0 ? 'text-success' : 'text-danger'} style={isStrike ? { fontWeight: 'bold' } : {}}>
                   {row.pnl >= 0 ? '+' : ''}{symbol}{row.pnl.toFixed(2)}
