@@ -131,7 +131,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
     const minPrice = results[0].price;
     const maxPrice = results[results.length - 1].price;
     const range = maxPrice - minPrice;
-    const tickCount = 8; // Number of ticks to show
+    const tickCount = 12; // Number of ticks to show (increased for better visibility)
     const step = range / (tickCount - 1);
     
     const ticks = [];
@@ -224,12 +224,12 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                 <ComposedChart
                   data={results}
                   margin={isFullScreen ? {
-                    top: 20,
+                    top: 40, // Increased for label visibility
                     right: 20,
                     left: 0,
                     bottom: 40, // Increased for iOS safe area
                   } : {
-                    top: 10,
+                    top: 30, // Increased for label visibility
                     right: 10,
                     left: 0,
                     bottom: 20,
@@ -249,6 +249,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                     tickFormatter={(val) => `${symbol}${val}`}
                   />
                   <Tooltip content={<CustomTooltip />} />
+                  <ReferenceLine x={currentPrice} stroke="var(--success)" strokeDasharray="3 3" label={{ position: 'top', value: 'Current', fill: 'var(--success)' }} />
                   <ReferenceLine x={strikePrice} stroke="var(--accent-secondary)" strokeDasharray="3 3" label={{ position: 'top', value: 'Strike', fill: 'var(--accent-secondary)' }} />
                   {targetPrice && targetPrice > 0 && (
                     <ReferenceLine 
