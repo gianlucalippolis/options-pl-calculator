@@ -42,7 +42,9 @@ export const translations = {
     atTheMoney: "At the Money",
 
     // Target price
+    operationAnalysis: "Analisi Operazione",
     targetAnalysis: "Analisi Target",
+    totalCost: "Costo Totale",
     toReachTarget: "Per raggiungere il target",
     priceNeedsTo: "il prezzo deve",
     increase: "aumentare",
@@ -108,7 +110,9 @@ export const translations = {
     atTheMoney: "At the Money",
 
     // Target price
+    operationAnalysis: "Operation Analysis",
     targetAnalysis: "Target Analysis",
+    totalCost: "Total Cost",
     toReachTarget: "To reach target",
     priceNeedsTo: "price needs to",
     increase: "increase",

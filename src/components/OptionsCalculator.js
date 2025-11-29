@@ -14,7 +14,6 @@ const OptionsCalculator = ({ initialType = 'call', onTypeChange, onOpenTypeSelec
     multiplier: 100,
     currency: 'EUR',
     targetPrice: null,
-    targetPrice: null,
     quantity: 1,
     expirationDate: '',
   });
@@ -163,6 +162,8 @@ const OptionsCalculator = ({ initialType = 'call', onTypeChange, onOpenTypeSelec
           targetPrice={data.targetPrice}
           quantity={data.quantity}
           expirationDate={data.expirationDate}
+          premium={data.premium}
+          multiplier={data.multiplier}
         />
 
         <div style={{ marginTop: '2rem', textAlign: 'center' }}>

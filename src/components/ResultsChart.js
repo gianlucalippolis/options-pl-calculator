@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { useLanguage } from '../context/LanguageContext';
 
-const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice, targetPrice, quantity = 1, expirationDate }) => {
+const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice, targetPrice, quantity = 1, expirationDate, premium, multiplier }) => {
   const { t } = useLanguage();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
@@ -57,17 +57,42 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
 
     const diff = targetPrice - currentPrice;
     const percentChange = (diff / currentPrice) * 100;
-    const isIncrease = diff > 0;
     const isReached = Math.abs(diff) < 0.01;
     
-    // Find the P&L at target price from results
-    const targetResult = results.find(r => Math.abs(r.price - targetPrice) < 0.01);
-    const pnlAtTarget = targetResult ? targetResult.pnl : 0;
+    // Calculate P&L directly at target price (same formula as in calculateResults)
+    let pnlAtTarget = 0;
+    if (premium && multiplier) {
+      const costPerOption = premium * multiplier;
+      
+      if (optionType === 'call') {
+        const intrinsicValue = Math.max(0, targetPrice - strikePrice);
+        pnlAtTarget = (intrinsicValue * multiplier) - costPerOption;
+      } else {
+        const intrinsicValue = Math.max(0, strikePrice - targetPrice);
+        pnlAtTarget = (intrinsicValue * multiplier) - costPerOption;
+      }
+    } else {
+      // Fallback: try to find in results
+      const targetResult = results.find(r => Math.abs(r.price - targetPrice) < 0.01);
+      pnlAtTarget = targetResult ? targetResult.pnl : 0;
+    }
+    
     const totalProfit = pnlAtTarget * quantity;
+    
+    // Determine if the movement is favorable for the option type
+    // For CALL: increase in price is favorable (green)
+    // For PUT: decrease in price is favorable (green)
+    let isFavorable;
+    if (optionType === 'call') {
+      isFavorable = diff > 0; // Price increase is favorable for CALL
+    } else {
+      isFavorable = diff < 0; // Price decrease is favorable for PUT
+    }
 
     return {
       percentChange: Math.abs(percentChange),
-      isIncrease,
+      isIncrease: diff > 0, // Keep for display purposes (arrow direction)
+      isFavorable: isFavorable,
       isReached,
       diff: Math.abs(diff),
       pnlAtTarget,
@@ -367,10 +392,61 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
         </div>
       </div>
 
-      {/* Target Analysis Card */}
-      {targetAnalysis && (
-        <div className="card" style={{ marginTop: '1.5rem', padding: '1.5rem' }}>
-          <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.25rem' }}>{t('targetAnalysis')}</h3>
+      {/* Analysis Card - Always visible */}
+      <div className="card" style={{ marginTop: '1.5rem', padding: '1.5rem' }}>
+        <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.25rem' }}>{t('operationAnalysis')}</h3>
+        
+        {/* Operation Cost Section - Always visible */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+          gap: '1rem',
+          marginBottom: targetAnalysis ? '1.5rem' : '0',
+          paddingBottom: targetAnalysis ? '1.5rem' : '0',
+          borderBottom: targetAnalysis ? '1px solid var(--border-color)' : 'none'
+        }}>
+          <div style={{ 
+            padding: '1rem',
+            borderRadius: '8px',
+            backgroundColor: 'var(--bg-tertiary)',
+            border: '1px solid var(--border-color)'
+          }}>
+            <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+              {t('totalCost')}
+            </div>
+            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>
+              {symbol}{(premium * multiplier * quantity).toFixed(2)}
+            </div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+              {premium.toFixed(2)} × {multiplier} × {quantity}
+            </div>
+          </div>
+          
+          {daysRemaining !== null && (
+            <div style={{ 
+              padding: '1rem',
+              borderRadius: '8px',
+              backgroundColor: 'var(--bg-tertiary)',
+              border: '1px solid var(--border-color)'
+            }}>
+              <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                {t('daysRemaining')}
+              </div>
+              <div style={{ 
+                fontSize: '1.5rem', 
+                fontWeight: 'bold', 
+                color: daysRemaining > 0 ? 'var(--text-primary)' : 'var(--danger)' 
+              }}>
+                {daysRemaining > 0 ? daysRemaining : 0}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Target Analysis Section - Only if target is set */}
+        {targetAnalysis && (
+          <>
+            <h4 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', color: 'var(--text-secondary)' }}>{t('targetAnalysis')}</h4>
           {targetAnalysis.isReached ? (
             <div style={{ 
               textAlign: 'center', 
@@ -391,7 +467,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                   <span style={{ 
                     fontSize: '1.5rem', 
                     fontWeight: 'bold',
-                    color: targetAnalysis.isIncrease ? 'var(--success)' : 'var(--danger)'
+                    color: targetAnalysis.isFavorable ? 'var(--success)' : 'var(--danger)'
                   }}>
                     {targetAnalysis.isIncrease ? '↑' : '↓'} {t(targetAnalysis.isIncrease ? 'increase' : 'decrease')}
                   </span>
@@ -401,7 +477,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                   <span style={{ 
                     fontSize: '2rem', 
                     fontWeight: 'bold',
-                    color: targetAnalysis.isIncrease ? 'var(--success)' : 'var(--danger)'
+                    color: targetAnalysis.isFavorable ? 'var(--success)' : 'var(--danger)'
                   }}>
                     {targetAnalysis.percentChange.toFixed(2)}%
                   </span>
@@ -410,8 +486,8 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
               <div style={{ 
                 padding: '1rem 1.5rem',
                 borderRadius: '12px',
-                backgroundColor: targetAnalysis.isIncrease ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                border: `2px solid ${targetAnalysis.isIncrease ? 'var(--success)' : 'var(--danger)'}`,
+                backgroundColor: targetAnalysis.isFavorable ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                border: `2px solid ${targetAnalysis.isFavorable ? 'var(--success)' : 'var(--danger)'}`,
                 textAlign: 'center'
               }}>
                 <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
@@ -423,7 +499,7 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
                 <div style={{ 
                   fontSize: '1.25rem', 
                   fontWeight: 'bold',
-                  color: targetAnalysis.isIncrease ? 'var(--success)' : 'var(--danger)',
+                  color: targetAnalysis.isFavorable ? 'var(--success)' : 'var(--danger)',
                   marginTop: '0.5rem'
                 }}>
                   {targetAnalysis.isIncrease ? '→' : '→'} {symbol}{targetPrice.toFixed(2)}
@@ -457,8 +533,9 @@ const ResultsChart = ({ results, strikePrice, currency, optionType, currentPrice
               </div>
             </div>
           )}
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
